@@ -14,5 +14,8 @@ class Controller:
     def handleConnessi(self, e):
         pass
 
+    def handleTestConnessione(self, e):
+        pass
+
     def handleCercaItinerario(self,e):
         pass
