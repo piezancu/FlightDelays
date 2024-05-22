@@ -35,26 +35,26 @@ class View(ft.UserControl):
         self._page.controls.append(row1)
 
         self._ddAeroportoP = ft.Dropdown(label="Partenza",
-                                         width=290,
+                                         width=400,
                                          disabled=True)
         self._btnConnessi = ft.ElevatedButton(text="Aeroporti Connessi",
                                               on_click=self._controller.handleConnessi,
                                               width=150,
                                               disabled=True)
         row2 = ft.Row([
-            ft.Container(self._ddAeroportoP, width=200),
+            ft.Container(self._ddAeroportoP, width=400),
             ft.Container(self._btnConnessi, width=200)],
             alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row2)
 
-        self._ddAeroportoA = ft.Dropdown(label="Arrivo", width=290,
+        self._ddAeroportoA = ft.Dropdown(label="Arrivo", width=400,
                                                      disabled=True)
         self._btnPercorso = ft.ElevatedButton(text="Test Connessione",
                                               on_click=self._controller.handleTestConnessione,
                                               width=150,
                                               disabled=True)
         row3 = ft.Row([
-            ft.Container(self._ddAeroportoA, width=200),
+            ft.Container(self._ddAeroportoA, width=400),
             ft.Container(self._btnPercorso, width=200)],
             alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row3)
