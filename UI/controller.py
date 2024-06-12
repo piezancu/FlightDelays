@@ -1,8 +1,13 @@
+from datetime import datetime
+
 import flet as ft
+
+from UI.view import View
+from model.model import Model
 
 
 class Controller:
-    def __init__(self, view, model):
+    def __init__(self, view: View, model: Model):
         # the view, with the graphical elements of the UI
         self._view = view
         # the model, which implements the logic of the program and holds the data
@@ -42,7 +47,7 @@ class Controller:
             self._view._txt_result.controls.append(ft.Text(f"Selezionare un aeroporto di partenza"))
             return
         v0 = self._choiceAeroportoP
-        vicini =  self._model.getSortedVicini(v0)
+        vicini = self._model.getSortedVicini(v0)
 
         self._view._txt_result.controls.append(ft.Text(f"Ecco i vicini di {v0}"))
         for v in vicini:
@@ -51,10 +56,53 @@ class Controller:
         self._view.update_page()
 
     def handleTestConnessione(self, e):
-        print(f"handleTestConnessione called")
+        v0 = self._choiceAeroportoP
+        v1 = self._choiceAeroportoA
+
+        self._view._txt_result.controls.clear()
+
+        # verifico che ci sia un percorso
+        if (not self._model.esistePercorso(v0, v1)):
+            self._view._txt_result.controls.append(ft.Text(f"Percorso tra {v0} e {v1} trovato"))
+
+        # trovo un possibile percorso
+        path = self._model.trovaCamminoBFS(v0, v1)
+        self._view._txt_result.controls.append(
+            ft.Text(f"Il cammino con minor numero di archi"
+                    f" fra {v0} e {v1} è:")
+        )
+        for p in path:
+            self._view._txt_result.controls.append(ft.Text(f"{p}"))
+
+        self._view._txtInNumTratte.disabled = False
+        self._view._btnCercaItinerario.disabled = False
+        self._view.update_page()
 
     def handleCercaItinerario(self,e):
-        print(f"handleCercaItinerario called")
+        v0 = self._choiceAeroportoP
+        v1 = self._choiceAeroportoA
+        t = self._view._txtInNumTratte.value
+
+        try:
+            tInt = int(t)
+        except ValueError:
+            self._view._txt_result.controls.clear()
+            self._view._txt_result.controls.append(ft.Text("Il valore inserito non è un numero."))
+            self._view.update_page()
+            return
+
+        tic = datetime.now()
+        path, nTot = self._model.getCamminoOttimo(v0, v1, tInt)
+        self._view._txt_result.controls.clear()
+        self._view._txt_result.controls.append(ft.Text(f"Il percorso ottimo fra {v0} e {v1} è:"))
+        for p in path:
+            self._view._txt_result.controls.append(ft.Text(p))
+        self._view._txt_result.controls.append(ft.Text(
+            f"Numero totale di voli: {nTot} "))
+        self._view._txt_result.controls.append(ft.Text(
+            f"Tempo impiegato per la ricerca: {datetime.now() - tic} secondi"))
+        self._view.update_page()
+
 
     def fillDD(self):
         allNodes = self._model.getAllNodes()
