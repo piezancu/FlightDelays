@@ -99,11 +99,13 @@ class Model:
         return nx.dijkstra_path(self._grafo, v0, v1)
 
     def trovaCamminoBFS(self, v0, v1):
+        #per trovare i nodi raggiungibili da v0
         tree = nx.bfs_tree(self._grafo, v0)
+        #controllo se v1 è tra questi
         if v1 in tree:
             print(f"{v1} è presente nell'albero di visita BFS")
         path = [v1]
-
+        #partendo da v1 visito i predecessori sino a trovare v0
         while path[-1] != v0:
             path.append(list(tree.predecessors(path[-1]))[0])
 
